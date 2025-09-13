@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= type.charAt(0).toUpperCase() + type.slice(1) %> Report - <%= student.name %></title>
+  <style>
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    .header img {
+      max-width: 100%;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+    h1, h2 {
+      color: #4568dc;
+    }
+    h2 {
+      margin-top: 30px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+    .student-info {
+      margin-bottom: 30px;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .student-details {
+      flex: 1;
+      min-width: 300px;
+    }
+    .student-photo {
+      width: 182px;
+      height: 236px;
+      border: 1px solid #ddd;
+      overflow: hidden;
+      margin-left: 20px;
+    }
+    .student-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+    }
+    .semester-heading {
+      background-color: #4568dc;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+    }
+    .grade-a-plus {
+      background-color: #4caf50;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .grade-a {
+      background-color: #8bc34a;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .grade-b-plus {
+      background-color: #cddc39;
+      color: black;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .grade-b {
+      background-color: #ffeb3b;
+      color: black;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .grade-c-plus {
+      background-color: #ffc107;
+      color: black;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .grade-c {
+      background-color: #ff9800;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .grade-f {
+      background-color: #f44336;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .report-title {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #4568dc;
+    }
+    .chart-container {
+      margin: 20px 0;
+      text-align: center;
+    }
+  </style>
+  <script>
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('download') === 'true') {
+        window.print();
+      }
+    };
+  </script>
+</head>
+<body>
+  <div class="header">
+    <img src="<%= headerLogo %>" alt="Institution Logo" />
+    <div class="report-title"><%= type.charAt(0).toUpperCase() + type.slice(1) %> Report</div>
+  </div>
+
+  <div class="student-info">
+    <div class="student-details">
+      <h3>Student Information</h3>
+      <p><strong>Name:</strong> <%= student.name %></p>
+      <p><strong>Registration Number:</strong> <%= student.registration_number %></p>
+      <p><strong>Branch:</strong> <%= student.branch %></p>
+      <p><strong>Current Semester:</strong> <%= student.current_semester %></p>
+      <p><strong>CGPA:</strong> <%= cgpa %></p>
+    </div>
+    <div class="student-photo">
+      <img src="<%= studentPhoto %>" alt="Student Photo" onerror="this.src=null" />
+    </div>
+  </div>
+
+  <h2>Course Details</h2>
+  <% Object.keys(semesterGrades).sort().forEach(semester => { %>
+    <div class="semester-heading">Semester <%= semester %></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Course Code</th>
+          <th>Course Name</th>
+          <th>Credits</th>
+          <th>Grade Points</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% semesterGrades[semester].forEach(grade => {
+            const letter = getLetterGrade(grade.grade_points);
+            const gradeClass = letter.replace('+', '-plus').toLowerCase();
+        %>
+          <tr>
+            <td><%= grade.course_code %></td>
+            <td><%= grade.course_name %></td>
+            <td><%= grade.credits %></td>
+            <td><%= grade.grade_points %></td>
+            <td><span class="grade-<%= gradeClass %>"><%= letter %></span></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% }) %>
+
+  <h2>Academic Performance</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Semester</th>
+        <th>SGPA</th>
+        <th>Credits Earned</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% sgpaBySemester.forEach(sem => { %>
+        <tr>
+          <td><%= sem.semester || 'N/A' %></td>
+          <td><%= sem.sgpa || 'N/A' %></td>
+          <td><%= sem.earned_credits || 0 %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <% if (includeCharts === true || includeCharts === 'true') { %>
+    <h2>Performance Charts</h2>
+    <div class="chart-container">
+      <%- performanceSVG %>
+    </div>
+    <div class="chart-container">
+      <%- gradeDistSVG %>
+    </div>
+  <% } %>
+
+  <div class="footer">
+    <p>Generated on <%= new Date().toLocaleDateString() %> by Automated Reporting System</p>
+  </div>
+</body>
+</html>

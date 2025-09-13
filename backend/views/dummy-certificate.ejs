@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Professional Certificate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 50px;
+      background: #f3f3f3;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .certificate-container {
+      width: 1000px;
+      margin: auto;
+      padding: 50px;
+      background: white;
+      border: 15px solid #d4af37;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+      position: relative;
+      background-image: radial-gradient(#fdfdfd, #f0f0f0);
+    }
+
+    .inner-border {
+      border: 2px solid #d4af37;
+      padding: 30px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: #333;
+      margin: 0;
+    }
+
+    .subheading {
+      font-size: 1.2rem;
+      color: #777;
+      margin-bottom: 40px;
+    }
+
+    .recipient-name {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 20px 0;
+      color: #222;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .description {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #444;
+      margin-bottom: 50px;
+      padding: 0 60px;
+    }
+
+    .details {
+      display: flex;
+      justify-content: space-around;
+      text-align: left;
+      margin-bottom: 50px;
+      font-size: 1rem;
+      color: #444;
+    }
+
+    .details div {
+      width: 45%;
+    }
+
+    .issuer-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
+    }
+
+    .issuer {
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .signature {
+      font-family: 'Brush Script MT', cursive;
+      font-size: 2rem;
+      color: #555;
+    }
+
+    .issuer-logo {
+      width: 100px;
+      height: auto;
+    }
+
+    .credential-id {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: 40px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="certificate-container">
+    <div class="inner-border">
+
+      <div class="header">
+        <h1>Certificate of Completion</h1>
+        <div class="subheading">This is to proudly certify that</div>
+      </div>
+
+      <div class="recipient-name"><%= student_name %></div>
+
+      <div class="description">
+        has successfully completed the program and met all the requirements for certification in<br>
+        <strong><%= certificationTitle || 'Advanced Generative AI and Agentic Systems' %></strong>
+      </div>
+
+      <div class="details">
+        <div>
+          <p><strong>Credential ID:</strong> <%= credentialId || 'N/A' %></p>
+          <p><strong>Date of Issue:</strong> <%= issueDate || 'N/A' %></p>
+          <p><strong>Valid Until:</strong> <%= expiryDate || 'N/A' %></p>
+        </div>
+        <div>
+          <p><strong>Issued By:</strong><br><%= issuer || 'Institute of AI Excellence' %></p>
+          <p><strong>Authorized Signatory:</strong><br><span class="signature">Dr. Emily Clarke</span></p>
+        </div>
+      </div>
+
+      <div class="issuer-section">
+        <div class="issuer">
+          <strong>Dr. Emily Clarke</strong><br>
+          Director, <%= issuer || 'Institute of AI Excellence' %><br>
+        </div>
+        <img src="<%= logo %>"  alt="Issuer Logo" class="issuer-logo">
+      </div>
+
+      <div class="credential-id">
+        Validate this credential at: <br>
+        <a href="<%= validationUrl || 'https://certs.ai-institute.org/validate' %>" target="_blank">
+          <%= validationUrl || 'https://certs.ai-institute.org/validate' %>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
